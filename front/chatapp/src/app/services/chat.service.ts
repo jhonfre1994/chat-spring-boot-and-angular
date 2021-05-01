@@ -1,6 +1,7 @@
 import { Optional } from '@angular/core';
 import { ChatComponent } from '../chat/chat.component';
 import { Chat } from '../model/chat.model';
+import { Messages } from '../model/messages';
 
 /**
  * varible soclñ
@@ -30,24 +31,16 @@ export class ChatService2 {
     this.stompClient.connect({}, function (frame) {
       that.stompClient.subscribe('/topic/messages/' + userName, (message) => {
         let data = JSON.parse(message.body);
-        this.talk = new Chat("", data.fromLogin, "", data.message, data.date, false);
-        console.log(data)
-        console.log(data.message)
-        console.log(data.fromLogin)
-        console.log(this.talk)
+        this.talk = new Messages(data.fromLogin, data.message, data.date, false);
         that.onMessageReceived(this.talk)
-        //console.log(data)
-        /* if (selectedUser === data.fromLogin) {
-            render(data.message, data.fromLogin);
-        } else {
-            newMessages.set(data.fromLogin, data.message);
-            $('#userNameAppender_' + data.fromLogin).append('<span id="newMessage_' + data.fromLogin + '" style="color: red">+1</span>');
-        } */
+      });
 
+      that.stompClient.subscribe('/topic/users/', (message) => {
+        let data = JSON.parse(message.body);
+        that.onMessageReceivedUsers(data)
       });
     });
   }
-
 
   sendMsg(from, text, selectedUser) {
     this.stompClient.send("/topic/messages/" + selectedUser, {}, JSON.stringify({
@@ -60,7 +53,11 @@ export class ChatService2 {
 
 
   onMessageReceived(message) {
-    console.log("Message Recieved from Server :: " + message);
     this.chatComponent.handleMessage(message);
+  }
+
+
+  onMessageReceivedUsers(listUsers) {
+    this.chatComponent.onMessageReceivedUsers(listUsers);
   }
 }
