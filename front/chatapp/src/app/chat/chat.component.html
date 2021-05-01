@@ -1,1 +1,24 @@
-<p>chat works!</p>
+<div class="p-grid">
+    <div class="p-col-2">
+        <p-toolbar>
+        </p-toolbar>
+        <div>
+            <p-listbox [options]="chats" [(ngModel)]="selectedChat" [style]="{'width':'100%'}"
+                [listStyle]="{'max-height': '90vh'}">
+                <ng-template let-user pTemplate="item">
+                    <div class="country-item">
+                        <!-- <img src="assets/images/user.png" width="50"> -->
+                        <span>{{user.nombreContacto}}</span>
+                    </div>
+                </ng-template>
+            </p-listbox>
+        </div>
+    </div>
+    <div class="p-col-10">
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+
+            </div>
+        </p-toolbar>
+    </div>
+</div>
