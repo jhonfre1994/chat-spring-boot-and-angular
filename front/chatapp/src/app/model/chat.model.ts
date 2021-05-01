@@ -1,7 +1,7 @@
 export class Chat {
-    constructor(public iniciales: string,
-                public nombreContacto: string,
-                public estadoContacto: string,
+    constructor(public image: string,
+                public author: string,
+                public authorStatus: string,
                 public text: string,
                 public date: Date,
                 public my: boolean) { }

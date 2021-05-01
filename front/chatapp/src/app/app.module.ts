@@ -5,8 +5,9 @@ import { AppRoutingModule } from './app.routing.module';
 import { SharedModule } from './shared.module';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ChatComponent } from './chats/chat.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -19,9 +20,10 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
     SharedModule,
     FormsModule,
     BrowserAnimationsModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [ChatComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

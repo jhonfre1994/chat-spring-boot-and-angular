@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Chat } from './chat.model';
+import { Chat } from '../model/chat.model';
 
 let date = new Date(),
     day = date.getDate(),
