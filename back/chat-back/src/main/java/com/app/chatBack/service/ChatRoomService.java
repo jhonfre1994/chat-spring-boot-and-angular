@@ -1,6 +1,5 @@
 package com.app.chatBack.service;
 
-
 import com.app.chatBack.model.ChatRoom;
 import com.app.chatBack.repository.ChatRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,33 +10,34 @@ import java.util.Optional;
 @Service
 public class ChatRoomService {
 
-    @Autowired private ChatRoomRepository chatRoomRepository;
+    @Autowired
+    private ChatRoomRepository chatRoomRepository;
 
     public Optional<String> getChatId(
             String senderId, String recipientId, boolean createIfNotExist) {
 
-         return chatRoomRepository
-                .findBySenderIdUserNameAndRecipientIdUserName(senderId, recipientId)
+        return chatRoomRepository
+                .findBySenderUserNameAndRecipientUserName(senderId, recipientId)
                 .map(ChatRoom::getChatId)
-                 .or(() -> {
-                    if(!createIfNotExist) {
-                        return  Optional.empty();
+                .or(() -> {
+                    if (!createIfNotExist) {
+                        return Optional.empty();
                     }
-                     var chatId =
-                            String.format("%s_%s", senderId, recipientId);
+                    var chatId
+                            = String.format("%s_%s", senderId, recipientId);
 
                     ChatRoom senderRecipient = ChatRoom
                             .builder()
                             .chatId(chatId)
-                            .senderIdUserName(senderId)
-                            .recipientIdUserName(recipientId)
+                            .senderUserName(senderId)
+                            .recipientUserName(recipientId)
                             .build();
 
                     ChatRoom recipientSender = ChatRoom
                             .builder()
                             .chatId(chatId)
-                            .senderIdUserName(recipientId)
-                            .recipientIdUserName(senderId)
+                            .senderUserName(recipientId)
+                            .recipientUserName(senderId)
                             .build();
                     chatRoomRepository.save(senderRecipient);
                     chatRoomRepository.save(recipientSender);

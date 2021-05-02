@@ -78,8 +78,7 @@ export class LoginComponent implements OnInit {
       this.authenticationService.login(this.modelUser.username, this.modelUser.password).subscribe(
         result => {
           if (result) {
-            //console.log(result)
-            sessionStorage.setItem("username", this.modelUser.username)
+            sessionStorage.setItem("access_token", result.access_token)
             this.navigateAfterSuccess();
           }
         },

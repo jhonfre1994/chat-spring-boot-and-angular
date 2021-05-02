@@ -5,7 +5,6 @@ import { UsersService } from '../services/users.service';
 import { Messages } from '../model/messages';
 import { UsuarioListDTO } from '../model/UsuarioListDTO';
 
-
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -36,10 +35,11 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userName = sessionStorage.getItem("username")
     //this.registrar();
     this.chatService2 = new ChatService2(new ChatComponent(this.usersService))
-    console.log(this.chatService2.talk)
+    this.userName = this.chatService2.getUsernameToken();
+
+    console.log(this.userName)
     this.getOnlineUsers();
     this.chatService2.connectToChat(sessionStorage.getItem("username"))
 
@@ -67,7 +67,7 @@ export class ChatComponent implements OnInit {
       //console.log(res)
       this.chats = res;
       this.chats.forEach((item, index) => {
-        if (item.nombreUsuario === sessionStorage.getItem("username")) this.chats.splice(index, 1);
+        if (item.nombreUsuario === this.userName) this.chats.splice(index, 1);
       });
     })
   }

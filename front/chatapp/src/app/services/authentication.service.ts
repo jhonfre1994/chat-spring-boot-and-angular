@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 /**
  * servicios para general el token
  */
@@ -19,7 +20,7 @@ export class AuthenticationService {
       .set('Authorization', 'Basic ' + btoa(environment.TOKEN_AUTH_USERNAME + ':' + environment.TOKEN_AUTH_PASSWORD))
   }
 
-  login(username: string, password: string) {
+  login(username: string, password: string):Observable<any> {
     const body = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&grant_type=password`;
     return this.http2.post(environment.gatewayServer + "oauth/token", body, this.header)
   }

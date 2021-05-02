@@ -26,12 +26,12 @@ public class ChatController {
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {
         var chatId = chatRoomService
-                .getChatId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true);
+                .getChatId(chatMessage.getSenderName(), chatMessage.getRecipientName(), true);
         chatMessage.setChatId(chatId.get());
 
         ChatMessage saved = chatMessageService.save(chatMessage);
         messagingTemplate.convertAndSendToUser(
-                chatMessage.getRecipientId(),"/queue/messages",
+                chatMessage.getRecipientName(),"/queue/messages",
                 new ChatNotification(
                         saved.getId(),
                         saved.getSenderId(),
