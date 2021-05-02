@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import lombok.var;
 
 @Service
 public class ChatRoomService {
@@ -18,7 +17,7 @@ public class ChatRoomService {
             String senderId, String recipientId, boolean createIfNotExist) {
 
          return chatRoomRepository
-                .findBySenderIdAndRecipientId(senderId, recipientId)
+                .findBySenderIdUserNameAndRecipientIdUserName(senderId, recipientId)
                 .map(ChatRoom::getChatId)
                  .or(() -> {
                     if(!createIfNotExist) {
@@ -30,15 +29,15 @@ public class ChatRoomService {
                     ChatRoom senderRecipient = ChatRoom
                             .builder()
                             .chatId(chatId)
-                            .senderId(senderId)
-                            .recipientId(recipientId)
+                            .senderIdUserName(senderId)
+                            .recipientIdUserName(recipientId)
                             .build();
 
                     ChatRoom recipientSender = ChatRoom
                             .builder()
                             .chatId(chatId)
-                            .senderId(recipientId)
-                            .recipientId(senderId)
+                            .senderIdUserName(recipientId)
+                            .recipientIdUserName(senderId)
                             .build();
                     chatRoomRepository.save(senderRecipient);
                     chatRoomRepository.save(recipientSender);

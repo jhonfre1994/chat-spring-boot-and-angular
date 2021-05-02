@@ -3,6 +3,7 @@ import { ChatService2 } from '../services/chat.service';
 import { Chat } from '../model/chat.model';
 import { UsersService } from '../services/users.service';
 import { Messages } from '../model/messages';
+import { UsuarioListDTO } from '../model/UsuarioListDTO';
 
 
 @Component({
@@ -14,10 +15,10 @@ import { Messages } from '../model/messages';
 export class ChatComponent implements OnInit {
   @ViewChild('sidenav') sidenav: any;
   public userImage = 'assets/img/users/user.jpg';
-  public chats: Array<Chat> = [];
+  public chats: Array<UsuarioListDTO> = [];
   public talks: Array<Messages> = [];
   public sidenavOpen: boolean = true;
-  public currentChat: Chat;
+  public currentChat: UsuarioListDTO;
   public newMessage: string;
   public userName: string;
 
@@ -25,7 +26,7 @@ export class ChatComponent implements OnInit {
   static instance: ChatComponent;
 
   constructor(private usersService: UsersService) {
-    this.currentChat = new Chat();
+    this.currentChat = new UsuarioListDTO();
     this.talks = [];
     if (ChatComponent.instance) {
       return ChatComponent.instance;
@@ -36,7 +37,7 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     this.userName = sessionStorage.getItem("username")
-    this.registrar();
+    //this.registrar();
     this.chatService2 = new ChatService2(new ChatComponent(this.usersService))
     console.log(this.chatService2.talk)
     this.getOnlineUsers();
@@ -62,11 +63,11 @@ export class ChatComponent implements OnInit {
 
 
   public getOnlineUsers() {
-    this.usersService.fetchAll().subscribe(res => {
-      console.log(res)
+    this.usersService.obtenerUsuarios().subscribe(res => {
+      //console.log(res)
       this.chats = res;
       this.chats.forEach((item, index) => {
-        if (item.author === sessionStorage.getItem("username")) this.chats.splice(index, 1);
+        if (item.nombreUsuario === sessionStorage.getItem("username")) this.chats.splice(index, 1);
       });
     })
   }
@@ -94,7 +95,7 @@ export class ChatComponent implements OnInit {
     console.log(text)
 
     this.talks.push(new Messages(sessionStorage.getItem("username"), text, new Date(year, month, day - 2, hour, minute), true));
-    this.chatService2.sendMsg(sessionStorage.getItem("username"), text, this.currentChat.author);
+    this.chatService2.sendMsg(sessionStorage.getItem("username"), text, this.currentChat);
   }
 
   handleMessage(message) {
@@ -109,11 +110,4 @@ export class ChatComponent implements OnInit {
     console.log(this.talks)
   }
 
-  onMessageReceivedUsers(listUsers) {
-    this.chats = [];
-    this.chats = listUsers;
-    this.chats.forEach((item, index) => {
-      if (item.author === sessionStorage.getItem("username")) this.chats.splice(index, 1);
-    });
-  }
 }

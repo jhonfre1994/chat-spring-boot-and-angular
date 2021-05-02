@@ -5,17 +5,18 @@ import com.app.chatBack.model.ChatMessage;
 import com.app.chatBack.model.ChatNotification;
 import com.app.chatBack.service.ChatMessageService;
 import com.app.chatBack.service.ChatRoomService;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
+@CrossOrigin(origins = "*", allowedHeaders = "true")
 public class ChatController {
 
     @Autowired private SimpMessagingTemplate messagingTemplate;

@@ -32,7 +32,7 @@
                   <mat-nav-list class="p-0 chat-sidenav-list" perfectScrollbar>
                       <mat-list-item *ngFor="let chat of chats" (click)="getChat(chat)">
                           <img matListAvatar [src]="">
-                          <h6 matLine> {{chat.author}} </h6>
+                          <h6 matLine> {{chat.nombres}} {{chat.apellidos}}</h6>
                           <p matLine fxLayout="row" fxLayoutAlign="none center" class="muted-text">
                               <span [ngSwitch]="chat.authorStatus">
                                   <mat-icon *ngSwitchCase="'Online'" class="chat-status-icon">check_circle</mat-icon>
@@ -57,7 +57,7 @@
                                   <img matListAvatar [src]="">
                               </mat-list-item>
                           </mat-list>
-                          <span *ngIf="currentChat" class="author-name">{{currentChat.author}}</span>
+                          <span *ngIf="currentChat" class="author-name">{{currentChat.nombres}} {{currentChat.apellidos}}</span>
                       </div>
                       <button mat-icon-button [matMenuTriggerFor]="personMenu" #personMenuTrigger="matMenuTrigger">
                           <mat-icon>more_vert</mat-icon>
