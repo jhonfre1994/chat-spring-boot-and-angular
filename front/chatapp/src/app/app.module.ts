@@ -8,11 +8,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ChatComponent } from './chat/chat.component';
+import { LoginComponent } from './login/login.component';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChatComponent
+    ChatComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +24,8 @@ import { ChatComponent } from './chat/chat.component';
     FormsModule,
     BrowserAnimationsModule,
     PerfectScrollbarModule,
-    HttpClientModule
+    HttpClientModule,
+    HttpModule
   ],
   providers: [ChatComponent],
   bootstrap: [AppComponent]

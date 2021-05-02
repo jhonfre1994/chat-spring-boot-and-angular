@@ -1,0 +1,66 @@
+<!-- 
+<div class="fondo">
+  <mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title>
+
+        <img class="logo" mat-card-image src="../../assets/bsc-color.png" alt="Logo Bsc">
+
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="example-form">
+        <table class="example-full-width" cellspacing="0">
+          <tr>
+            <td>
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Nombre de usuario" [(ngModel)]="model.username" name="username" required>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Contraseña" [(ngModel)]="model.password" type="password" name="password"
+                  required>
+              </mat-form-field>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="botonLogin">
+        <button mat-raised-button (click)="login()" color="primary">Ingresar</button>
+
+      </div>
+    </mat-card-actions>
+    <mat-progress-bar mode="indeterminate" *ngIf="IsWait"></mat-progress-bar>
+  </mat-card>
+</div> -->
+
+<div class="login">
+  <mat-card class="cardLogin" style="width: 400px;">
+    <p-progressBar mode="indeterminate" [style]="{'height': '6px'}" *ngIf="IsWait"></p-progressBar>
+    <div class="botonDiv">
+      <img style="width: 150px;margin-top: 10px;margin-left: 120px;" src="Card" src="assets/bsc-color.png">
+      <br><br>
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Usuario</mat-label>
+        <input (keyup.enter)="login()" matInput placeholder="Ingresar usuario" name="usuario" type="text"
+          [(ngModel)]="modelUser.username" required>
+        <mat-icon matSuffix>account_circle</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="width: 100%;margin-top: -20px">
+        <mat-label>Clave</mat-label>
+        <input (keyup.enter)="login()" matInput name="password" type="password" placeholder="Ingresar clave"
+          [(ngModel)]="modelUser.password" required>
+        <mat-icon matSuffix>https</mat-icon>
+      </mat-form-field>
+    </div>
+    <div class="botonDiv">
+      <button color="primary" style="width: 100%;" (click)="login()" mat-raised-button color="primary">Iniciar
+        Sesión</button>
+    </div>
+  </mat-card>
+</div>

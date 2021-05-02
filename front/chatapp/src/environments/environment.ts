@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  gatewayServer: 'http://localhost:8081/',
+  TOKEN_AUTH_USERNAME: 'USER_CLIENT_APP',
+  TOKEN_AUTH_PASSWORD: 'admin',
+  TOKEN_NAME: 'access_token',
 };
 
 /*

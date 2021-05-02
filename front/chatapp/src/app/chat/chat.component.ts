@@ -25,7 +25,8 @@ export class ChatComponent implements OnInit {
   static instance: ChatComponent;
 
   constructor(private usersService: UsersService) {
-
+    this.currentChat = new Chat();
+    this.talks = [];
     if (ChatComponent.instance) {
       return ChatComponent.instance;
     }
@@ -34,6 +35,8 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userName = sessionStorage.getItem("username")
+    this.registrar();
     this.chatService2 = new ChatService2(new ChatComponent(this.usersService))
     console.log(this.chatService2.talk)
     this.getOnlineUsers();
@@ -69,7 +72,6 @@ export class ChatComponent implements OnInit {
   }
 
   public registrar() {
-    sessionStorage.setItem("username", this.userName)
     this.usersService.registration(this.userName).subscribe(res => {
       this.chatService2.connectToChat(this.userName);
     },
