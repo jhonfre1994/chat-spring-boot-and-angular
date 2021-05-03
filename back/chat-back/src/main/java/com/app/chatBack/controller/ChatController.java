@@ -1,6 +1,5 @@
 package com.app.chatBack.controller;
 
-
 import com.app.chatBack.model.ChatMessage;
 import com.app.chatBack.model.ChatNotification;
 import com.app.chatBack.service.ChatMessageService;
@@ -19,9 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 @CrossOrigin(origins = "*", allowedHeaders = "true")
 public class ChatController {
 
-    @Autowired private SimpMessagingTemplate messagingTemplate;
-    @Autowired private ChatMessageService chatMessageService;
-    @Autowired private ChatRoomService chatRoomService;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private ChatMessageService chatMessageService;
+    @Autowired
+    private ChatRoomService chatRoomService;
 
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {
@@ -31,11 +33,7 @@ public class ChatController {
 
         ChatMessage saved = chatMessageService.save(chatMessage);
         messagingTemplate.convertAndSendToUser(
-                chatMessage.getRecipientName(),"/queue/messages",
-                new ChatNotification(
-                        saved.getId(),
-                        saved.getSenderId(),
-                        saved.getSenderName()));
+                chatMessage.getRecipientName(), "/queue/messages", chatMessage);
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}/count")
@@ -48,14 +46,14 @@ public class ChatController {
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<?> findChatMessages ( @PathVariable String senderId,
-                                                @PathVariable String recipientId) {
+    public ResponseEntity<?> findChatMessages(@PathVariable String senderId,
+            @PathVariable String recipientId) {
         return ResponseEntity
                 .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }
 
     @GetMapping("/messages/{id}")
-    public ResponseEntity<?> findMessage ( @PathVariable String id) {
+    public ResponseEntity<?> findMessage(@PathVariable String id) {
         return ResponseEntity
                 .ok(chatMessageService.findById(id));
     }

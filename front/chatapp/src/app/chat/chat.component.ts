@@ -1,30 +1,31 @@
 import { Component, OnInit, HostListener, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
-import { ChatService2 } from '../services/chat.service';
-import { Chat } from '../model/chat.model';
 import { UsersService } from '../services/users.service';
 import { Messages } from '../model/messages';
 import { UsuarioListDTO } from '../model/UsuarioListDTO';
+import { Socket } from '../socket/Socker';
+import { ChatService } from '../services/chat.service';
+import { ChatMessage } from '../model/ChatMessage';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
-  providers: [UsersService]
+  providers: [UsersService, ChatService]
 })
 export class ChatComponent implements OnInit {
   @ViewChild('sidenav') sidenav: any;
   public userImage = 'assets/img/users/user.jpg';
   public chats: Array<UsuarioListDTO> = [];
-  public talks: Array<Messages> = [];
+  public talks: Array<ChatMessage> = [];
   public sidenavOpen: boolean = true;
   public currentChat: UsuarioListDTO;
   public newMessage: string;
   public userName: string;
-
-  chatService2: ChatService2
+  public hideElement: boolean = false;
+  socketService: Socket;
   static instance: ChatComponent;
 
-  constructor(private usersService: UsersService) {
+  constructor(private usersService: UsersService, private chatService: ChatService) {
     this.currentChat = new UsuarioListDTO();
     this.talks = [];
     if (ChatComponent.instance) {
@@ -36,12 +37,12 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     //this.registrar();
-    this.chatService2 = new ChatService2(new ChatComponent(this.usersService))
-    this.userName = this.chatService2.getUsernameToken();
+    this.socketService = new Socket(new ChatComponent(this.usersService, this.chatService))
+    this.userName = this.socketService.getUsernameToken();
 
     console.log(this.userName)
     this.getOnlineUsers();
-    this.chatService2.connectToChat(sessionStorage.getItem("username"))
+    this.socketService.connectToChat(sessionStorage.getItem("username"))
 
     if (window.innerWidth <= 768) {
       this.sidenavOpen = false;
@@ -55,7 +56,10 @@ export class ChatComponent implements OnInit {
   }
 
   public getChat(obj) {
+    this.hideElement = true;
     this.currentChat = obj;
+    this.currentChat.newMessages = 0;
+    this.getChatsUser(this.userName, obj.nombreUsuario)
     if (window.innerWidth <= 768) {
       this.sidenav.close();
     }
@@ -64,17 +68,18 @@ export class ChatComponent implements OnInit {
 
   public getOnlineUsers() {
     this.usersService.obtenerUsuarios().subscribe(res => {
-      //console.log(res)
       this.chats = res;
+      console.log(res)
       this.chats.forEach((item, index) => {
         if (item.nombreUsuario === this.userName) this.chats.splice(index, 1);
       });
     })
   }
 
+  //eliminar metodo
   public registrar() {
     this.usersService.registration(this.userName).subscribe(res => {
-      this.chatService2.connectToChat(this.userName);
+      this.socketService.connectToChat(this.userName);
     },
       error => {
         if (error.status === 400) {
@@ -85,29 +90,35 @@ export class ChatComponent implements OnInit {
   }
 
   public sendMs(text) {
-    let date = new Date(),
-      day = date.getDate(),
-      month = date.getMonth(),
-      year = date.getFullYear(),
-      hour = date.getHours(),
-      minute = date.getMinutes();
-
-    console.log(text)
-
-    this.talks.push(new Messages(sessionStorage.getItem("username"), text, new Date(year, month, day - 2, hour, minute), true));
-    this.chatService2.sendMsg(sessionStorage.getItem("username"), text, this.currentChat);
+    let date = new Date()
+    this.newMessage = "";
+    this.talks.push(new ChatMessage("", "smsSocket.chatId", "smsSocket.senderId", "smsSocket.recipientId", this.userName,
+      this.currentChat.nombreUsuario, text, date, "smsSocket.status"));
+    this.socketService.sendMsg(text, this.currentChat);
   }
 
   handleMessage(message) {
-    let date = new Date(),
-      day = date.getDate(),
-      month = date.getMonth(),
-      year = date.getFullYear(),
-      hour = date.getHours(),
-      minute = date.getMinutes();
-    console.log(message)
-    this.talks.push(new Messages(message.author, message.text, new Date(year, month, day - 2, hour, minute), false))
+    if(message.senderName == this.currentChat.nombreUsuario){
+      this.talks.push(message);
+    }else{
+      this.chats.forEach(element => {
+        if(element.nombreUsuario == message.senderName){
+          element.newMessages = element.newMessages + 1;
+        }
+      });
+    }
+    console.log(this.chats)
     console.log(this.talks)
+  }
+
+  getChatsUser(senderUsername: string, recipienUsername: string) {
+    this.talks = []
+    this.chatService.getChats(senderUsername, recipienUsername).subscribe(res => {
+      if (res != null) {
+        this.talks = res;
+        console.log
+      }
+    })
   }
 
 }

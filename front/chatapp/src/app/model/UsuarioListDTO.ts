@@ -4,5 +4,5 @@ export class UsuarioListDTO {
     public nombreUsuario: string;
     public nombres: string;
     public apellidos: string;
-
+    public newMessages: number;
 }
