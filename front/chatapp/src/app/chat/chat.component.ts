@@ -1,32 +1,32 @@
 import { Component, OnInit, HostListener, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
-import { UsersService } from '../services/users.service';
-import { Messages } from '../model/messages';
-import { UsuarioListDTO } from '../model/UsuarioListDTO';
+import { UserSession } from '../model/UserSession';
 import { Socket } from '../socket/Socker';
 import { ChatService } from '../services/chat.service';
 import { ChatMessage } from '../model/ChatMessage';
+import { SessionsService } from '../services/sessions.service';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
-  providers: [UsersService, ChatService]
+  providers: [SessionsService, ChatService]
 })
 export class ChatComponent implements OnInit {
   @ViewChild('sidenav') sidenav: any;
   public userImage = 'assets/img/users/user.jpg';
-  public chats: Array<UsuarioListDTO> = [];
+  public chats: Array<UserSession> = [];
   public talks: Array<ChatMessage> = [];
   public sidenavOpen: boolean = true;
-  public currentChat: UsuarioListDTO;
+  public currentChat: UserSession;
   public newMessage: string;
   public userName: string;
   public hideElement: boolean = false;
   socketService: Socket;
   static instance: ChatComponent;
+  public currerntSession: UserSession = new UserSession();
 
-  constructor(private usersService: UsersService, private chatService: ChatService) {
-    this.currentChat = new UsuarioListDTO();
+  constructor(private sessionService: SessionsService, private chatService: ChatService) {
+    this.currentChat = new UserSession();
     this.talks = [];
     if (ChatComponent.instance) {
       return ChatComponent.instance;
@@ -36,13 +36,11 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.registrar();
-    this.socketService = new Socket(new ChatComponent(this.usersService, this.chatService))
-    this.userName = this.socketService.getUsernameToken();
-
-    console.log(this.userName)
-    this.getOnlineUsers();
-    this.socketService.connectToChat(sessionStorage.getItem("username"))
+    this.socketService = new Socket(new ChatComponent(this.sessionService, this.chatService))
+    this.currerntSession = this.socketService.getUserSessionDataToken();
+    console.log(this.currerntSession)
+    this.registerToChat();
+    //this.socketService.connectToChat(sessionStorage.getItem("username"))
 
     if (window.innerWidth <= 768) {
       this.sidenavOpen = false;
@@ -59,7 +57,7 @@ export class ChatComponent implements OnInit {
     this.hideElement = true;
     this.currentChat = obj;
     this.currentChat.newMessages = 0;
-    this.getChatsUser(this.userName, obj.nombreUsuario)
+    this.getChatsUser(this.currerntSession.userName, obj.userName)
     if (window.innerWidth <= 768) {
       this.sidenav.close();
     }
@@ -67,48 +65,62 @@ export class ChatComponent implements OnInit {
 
 
   public getOnlineUsers() {
-    this.usersService.obtenerUsuarios().subscribe(res => {
+    this.sessionService.getSessions().subscribe(res => {
       this.chats = res;
-      console.log(res)
       this.chats.forEach((item, index) => {
-        if (item.nombreUsuario === this.userName) this.chats.splice(index, 1);
+        if (item.userName === this.currerntSession.userName) this.chats.splice(index, 1);
+
+      });
+      this.chats.forEach(element => {
+        element.newMessages = 0;
       });
     })
   }
 
-  //eliminar metodo
-  public registrar() {
-    this.usersService.registration(this.userName).subscribe(res => {
-      this.socketService.connectToChat(this.userName);
+  public registerToChat() {
+    this.sessionService.registerSessions(this.currerntSession).subscribe(res => {
+      this.socketService.connectToChat();
+      this.getOnlineUsers();
     },
       error => {
+        console.log(error)
         if (error.status === 400) {
           console.log
         }
       });
-    //this.getOnlineUsers();
   }
 
   public sendMs(text) {
     let date = new Date()
     this.newMessage = "";
-    this.talks.push(new ChatMessage("", "smsSocket.chatId", "smsSocket.senderId", "smsSocket.recipientId", this.userName,
-      this.currentChat.nombreUsuario, text, date, "smsSocket.status"));
+    this.talks.push(new ChatMessage("", "smsSocket.chatId", "smsSocket.senderId", "smsSocket.recipientId", this.currerntSession.userName,
+      this.currentChat.userName, text, date, "smsSocket.status"));
     this.socketService.sendMsg(text, this.currentChat);
   }
 
   handleMessage(message) {
-    if(message.senderName == this.currentChat.nombreUsuario){
+    if (message.senderName == this.currentChat.userName) {
       this.talks.push(message);
-    }else{
+    } else {
       this.chats.forEach(element => {
-        if(element.nombreUsuario == message.senderName){
-          element.newMessages = element.newMessages + 1;
+        if (element.userName == message.senderName) {
+          element.newMessages += 1;
         }
       });
     }
-    console.log(this.chats)
-    console.log(this.talks)
+  }
+
+
+  handleMessageSessions(message) {
+
+    this.chats = message;
+    this.chats.forEach((item, index) => {
+      if (item.userName === this.currerntSession.userName) this.chats.splice(index, 1);
+
+    });
+    this.chats.forEach(element => {
+      element.newMessages = 0;
+    });
   }
 
   getChatsUser(senderUsername: string, recipienUsername: string) {
@@ -116,8 +128,13 @@ export class ChatComponent implements OnInit {
     this.chatService.getChats(senderUsername, recipienUsername).subscribe(res => {
       if (res != null) {
         this.talks = res;
-        console.log
       }
+    })
+  }
+
+  updateStatusSession(status: string) {
+    this.sessionService.updateStatusSession(this.currerntSession.userName, status).subscribe(res => {
+      console.log(res)
     })
   }
 

@@ -21,11 +21,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Builder
 @Document
-public class UsersConnected {
+public class UserSession {
 
     @Id
     private String id;
-    private String username;
+    private String userName;
     private String name;
     private String lastName;
     private String status;

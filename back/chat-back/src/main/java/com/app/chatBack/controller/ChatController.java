@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-@CrossOrigin(origins = "*", allowedHeaders = "true")
+//@CrossOrigin(origins = "*", allowedHeaders = "true")
 public class ChatController {
 
     @Autowired

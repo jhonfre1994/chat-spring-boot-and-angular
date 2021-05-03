@@ -16,17 +16,21 @@
                     </mat-toolbar>
                     <mat-menu #userMenu="matMenu" xPosition="before" overlapTrigger="true">
                         <span (mouseleave)="userMenuTrigger.closeMenu()">
-                            <button mat-menu-item>
-                                <mat-icon>account_circle</mat-icon>
-                                <span>Profile</span>
+                            <button mat-menu-item (click)="updateStatusSession('En linea')">
+                                <mat-icon style="color:#94c23d;">check_circle</mat-icon>
+                                <span>En linea</span>
                             </button>
-                            <button mat-menu-item>
-                                <mat-icon>settings</mat-icon>
-                                <span>Settings</span>
+                            <button mat-menu-item (click)="updateStatusSession('Ausente')">
+                                <mat-icon style="color:#FFC42A;">schedule</mat-icon>
+                                <span>Ausente</span>
                             </button>
-                            <a mat-menu-item routerLink="/">
+                            <button mat-menu-item (click)="updateStatusSession('No molestar')">
+                                <mat-icon style="color:#FFC42A;">not_interested</mat-icon>
+                                <span>No molestar</span>
+                            </button>
+                            <a mat-menu-item routerLink="/" (click)="updateStatusSession('Desconectado')">
                                 <mat-icon>power_settings_new</mat-icon>
-                                <span>Exit chat</span>
+                                <span>Desconectar</span>
                             </a>
                         </span>
                     </mat-menu>
@@ -36,7 +40,15 @@
                     <mat-list>
                         <mat-list-item (click)="getChat(chat)" *ngFor="let chat of chats">
                             <!-- <img mat-list-icon [src]=""> -->
-                            <div style="font-size: 15px;" mat-line>{{chat.nombres}} {{chat.apellidos}}</div>
+                            <div style="font-size: 15px;" mat-line>{{chat.name}} {{chat.lastName}}</div>
+                            <span [ngSwitch]="chat.status">
+                                <mat-icon *ngSwitchCase="'En linea'" class="chat-status-icon_online">check_circle</mat-icon>
+                                <mat-icon *ngSwitchCase="'Desconectado'" class="chat-status-icon_disconnect">highlight_off
+                                </mat-icon>
+                                <mat-icon *ngSwitchCase="'Ausente'" class="chat-status-icon_wait">schedule</mat-icon>
+                                <mat-icon *ngSwitchCase="'No molestar'" class="chat-status-icon_dontDisturb">not_interested
+                                </mat-icon> 
+                            </span>
                             <div mat-line style="font-size: 10px; ">
                                 <some-element [ngPlural]="chat.newMessages">
                                     <ng-template ngPluralCase="=0"></ng-template>
@@ -80,11 +92,11 @@
                             <span *ngIf="currentChat" class="author-name">{{currentChat.nombres}}
                                 {{currentChat.apellidos}}</span>
                         </div>
-                        <button mat-icon-button [matMenuTriggerFor]="personMenu" #personMenuTrigger="matMenuTrigger">
+                        <!-- <button mat-icon-button [matMenuTriggerFor]="personMenu" #personMenuTrigger="matMenuTrigger">
                             <mat-icon>more_vert</mat-icon>
-                        </button>
+                        </button> -->
                     </mat-toolbar>
-                    <mat-menu #personMenu="matMenu" xPosition="before" overlapTrigger="true">
+                    <!-- <mat-menu #personMenu="matMenu" xPosition="before" overlapTrigger="true">
                         <span (mouseleave)="personMenuTrigger.closeMenu()">
                             <button mat-menu-item>
                                 <mat-icon>account_circle</mat-icon>
@@ -99,16 +111,18 @@
                                 <span>Clear chat</span>
                             </button>
                         </span>
-                    </mat-menu>
+                    </mat-menu> -->
                     <div class="chat-content" perfectScrollbar>
                         <mat-list *ngIf="hideElement" class="p-0">
                             <mat-list-item *ngFor="let talk of talks" class="talk-item">
                                 <!-- <img matListAvatar [src]=""> -->
-                                <p  matLine [ngClass]="(talk.senderName == this.userName) ? 'messageNotMine' : 'messageMine'">
-                                    <span 
-                                        [ngClass]="(talk.senderName == this.userName) ? 'mine' : 'notMine'">{{talk.content}}</span>
+                                <p matLine
+                                    [ngClass]="(talk.senderName == this.currentChat.userName) ? 'messageNotMine' : 'messageMine'">
+                                    <span
+                                        [ngClass]="(talk.senderName == this.currentChat.userName) ? 'mine' : 'notMine'">{{talk.content}}</span>
                                 </p>
-                                <p matLine  [ngClass]="(talk.senderName == this.userName) ? 'messageNotMine' : 'messageMine'">
+                                <p matLine
+                                    [ngClass]="(talk.senderName == this.currentChat.userName) ? 'messageNotMine' : 'messageMine'">
                                     <small>{{talk.timestamp | date:"dd MMMM, yyyy 'at' HH:mm"}}</small>
                                 </p>
                             </mat-list-item>

@@ -1,11 +1,7 @@
 import { Optional } from '@angular/core';
 import { ChatComponent } from '../chat/chat.component';
-import { Chat } from '../model/chat.model';
-import { Messages } from '../model/messages';
-import { UsuarioListDTO } from '../model/UsuarioListDTO';
+import { UserSession } from '../model/UserSession';
 import jwt_decode from "jwt-decode";
-import { Observable } from 'rxjs';
-import { ChatMessage } from '../model/ChatMessage';
 
 
 /**
@@ -28,7 +24,7 @@ export class Socket {
     }
 
 
-    connectToChat(userName) {
+    connectToChat() {
 
         console.log("connecting to chat...")
         const serverUrl = this.url + '/ws';
@@ -42,30 +38,31 @@ export class Socket {
             });
 
 
-            that.stompClient.subscribe('/queue/users', (message) => {
+            that.stompClient.subscribe('/user/queue/users', (message) => {
                 let data = JSON.parse(message.body);
+                that.onMessageReceivedSessions(data)
             });
 
 
         });
     }
 
-   /*  onConnected(){
-        console.log("connected");
-        stompClient.subscribe(
-          "/user/" + currentUser.id + "/queue/messages",
-          onMessageReceived
-        );
-      };
- */
+    /*  onConnected(){
+         console.log("connected");
+         stompClient.subscribe(
+           "/user/" + currentUser.id + "/queue/messages",
+           onMessageReceived
+         );
+       };
+  */
 
 
-    sendMsg(text, selectedUser: UsuarioListDTO) {
+    sendMsg(text, selectedUser: UserSession) {
         this.stompClient.send("/app/chat", {}, JSON.stringify({
             senderId: this.getIdUsernameToken(),
             recipientId: selectedUser.idUsuario,
             senderName: this.getUsernameToken(),
-            recipientName: selectedUser.nombreUsuario,
+            recipientName: selectedUser.userName,
             content: text,
             timestamp: new Date(),
         }));
@@ -73,6 +70,10 @@ export class Socket {
 
     onMessageReceived(message) {
         this.chatComponent.handleMessage(message);
+    }
+
+    onMessageReceivedSessions(message) {
+        this.chatComponent.handleMessageSessions(message);
     }
 
 
@@ -87,6 +88,17 @@ export class Socket {
         let token = sessionStorage.getItem("access_token");
         this.decoded = jwt_decode(token);
         return this.decoded.user_name;
+    }
+
+    getUserSessionDataToken(): UserSession {
+        let res = new UserSession();
+        let token = sessionStorage.getItem("access_token");
+        this.decoded = jwt_decode(token);
+        res.lastName = this.decoded.latsName;
+        res.name = this.decoded.name;
+        res.userName = this.decoded.user_name;
+        res.status = "En linea";
+        return res;
     }
 
 }

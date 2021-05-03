@@ -37,13 +37,42 @@
         }
     }
 }
-.chat-status-icon{
+
+.chat-status-icon_online{
+    font-size: 14px;
+    height: 14px;
+    width: 14px;
+    line-height: 22px;
+    margin-right: 6px;
+    color: #94c23d;
+}
+
+.chat-status-icon_wait{
+    font-size: 14px;
+    height: 14px;
+    width: 14px;
+    line-height: 22px;
+    margin-right: 6px;
+    color: #FFC42A;
+}
+
+.chat-status-icon_dontDisturb{
+    font-size: 14px;
+    height: 14px;
+    width: 14px;
+    line-height: 22px;
+    margin-right: 6px;
+    color: #FFC42A;
+}
+
+.chat-status-icon_disconnect{
     font-size: 14px;
     height: 14px;
     width: 14px;
     line-height: 22px;
     margin-right: 6px;
 }
+
 .author-status{
     font-size: 13px;
 }
