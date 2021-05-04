@@ -58,11 +58,11 @@ public class ChatMessageService {
                         -> new ResourceNotFoundException("can't find message (" + id + ")"));
     }
 
-    public void updateStatuses(String senderId, String recipientId, MessageStatus status) {
+    public void updateStatuses(String senderId, String recipientId, String status) {
         Query query = new Query(
                 Criteria
-                        .where("senderName").is(senderId)
-                        .and("recipientName").is(recipientId));
+                        .where("senderName").is(recipientId)
+                        .and("recipientName").is(senderId));
         Update update = Update.update("status", status);
         mongoOperations.updateMulti(query, update, ChatMessage.class);
     }

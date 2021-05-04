@@ -7,12 +7,16 @@ package com.app.chatBack.service;
 
 import com.app.chatBack.exception.ResourceNotFoundException;
 import com.app.chatBack.model.UserSession;
+import com.app.chatBack.model.UserStatus;
 import com.app.chatBack.repository.SessionsRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 /**
@@ -26,16 +30,18 @@ public class SessionService {
     private SessionsRepository sessionsRepository;
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private MongoOperations mongoOperations;
 
     public UserSession saveSessionUser(UserSession session) {
         UserSession res = new UserSession();
         try {
             if (sessionsRepository.findByUserName(session.getUserName()) == null) {
                 res = sessionsRepository.save(session);
-                messagingTemplate.convertAndSend("/user/queue/users", sessionsRepository.findAll());
             } else {
-                updateStatus(session.getUserName(), "En linea");
+                updateStatus(session.getUserName(), UserStatus.ONLINE);
             }
+            messagingTemplate.convertAndSend("/user/queue/users", sessionsRepository.findAll());
         } catch (Exception e) {
             throw new ResourceNotFoundException("error");
         }
@@ -48,12 +54,12 @@ public class SessionService {
 
     public void updateStatus(String unsername, String status) {
         try {
-            UserSession usr = sessionsRepository.findByUserName(unsername);
-            if (usr != null) {
-                usr.setStatus(status);
-                sessionsRepository.save(usr);
-                messagingTemplate.convertAndSend("/user/queue/users", sessionsRepository.findAll());
-            }
+            Query query = new Query(
+                    Criteria
+                            .where("userName").is(unsername));
+            Update update = Update.update("status", status);
+            mongoOperations.updateFirst(query, update, UserSession.class);
+            messagingTemplate.convertAndSend("/user/queue/users", sessionsRepository.findAll());
         } catch (Exception e) {
             throw new ResourceNotFoundException("error");
         }

@@ -38,6 +38,24 @@
     }
 }
 
+.author-status{
+    font-size: 13px;
+}
+.chat-sidenav{
+    border-right: 1px solid transparent;
+    overflow: hidden;
+    width: 200px;   
+}
+.chat-content{
+    overflow: auto;
+    padding: 12px;
+    height: calc(100vh - (56px + 8px*2 + 238px));
+}
+.chat-sidenav-list {
+    height: calc(100vh - (56px + 8px*2 + 134px));
+}
+
+
 .chat-status-icon_online{
     font-size: 14px;
     height: 14px;
@@ -73,21 +91,6 @@
     margin-right: 6px;
 }
 
-.author-status{
-    font-size: 13px;
-}
-.chat-sidenav{
-    border-right: 1px solid transparent;
-    overflow: hidden;
-    width: 200px;   
-}
-.chat-content{
-    padding: 12px;
-    height: calc(100vh - (56px + 8px*2 + 238px));
-}
-.chat-sidenav-list {
-    height: calc(100vh - (56px + 8px*2 + 134px));
-}
 
 .notMine{
     background-color: #4fc1e1;

@@ -57,6 +57,7 @@ export class ChatComponent implements OnInit {
     this.hideElement = true;
     this.currentChat = obj;
     this.currentChat.newMessages = 0;
+    console.log(this.currerntSession.userName,obj.userNam )
     this.getChatsUser(this.currerntSession.userName, obj.userName)
     if (window.innerWidth <= 768) {
       this.sidenav.close();

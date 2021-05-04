@@ -84,13 +84,8 @@
                             <button mat-icon-button (click)="sidenav.toggle()">
                                 <mat-icon>list</mat-icon>
                             </button>
-                            <mat-list *ngIf="currentChat" class="p-0">
-                                <mat-list-item>
-                                    <!-- <img matListAvatar [src]=""> -->
-                                </mat-list-item>
-                            </mat-list>
-                            <span *ngIf="currentChat" class="author-name">{{currentChat.nombres}}
-                                {{currentChat.apellidos}}</span>
+                            <span *ngIf="currentChat" class="author-name">{{currentChat.name}}
+                                {{currentChat.lastName}}</span>
                         </div>
                         <!-- <button mat-icon-button [matMenuTriggerFor]="personMenu" #personMenuTrigger="matMenuTrigger">
                             <mat-icon>more_vert</mat-icon>
@@ -112,7 +107,7 @@
                             </button>
                         </span>
                     </mat-menu> -->
-                    <div class="chat-content" perfectScrollbar>
+                    <div class="chat-content">
                         <mat-list *ngIf="hideElement" class="p-0">
                             <mat-list-item *ngFor="let talk of talks" class="talk-item">
                                 <!-- <img matListAvatar [src]=""> -->
@@ -136,15 +131,15 @@
                     <mat-card class="chat-actions">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <mat-form-field style="width: 100%;">
-                                <input [disabled]="!hideElement" matInput placeholder="Escribe un mensaje..."
-                                    [(ngModel)]="newMessage">
+                                <input [disabled]="!hideElement" matInput placeholder="Escribe un mensaje..." 
+                                    [(ngModel)]="newMessage"  (keyup.enter)="sendMs(newMessage)">
                             </mat-form-field>
                             <div fxLayout="row" fxLayoutAlign="scenter center">
                                 <!-- <button mat-icon-button type="button">
                                   <mat-icon>attach_file</mat-icon>
                               </button> -->
                                 <button [disabled]="!hideElement" mat-mini-fab color="primary" type="button"
-                                    (click)="sendMs(newMessage)">
+                                (click)="sendMs(newMessage)">
                                     <mat-icon>send</mat-icon>
                                 </button>
                             </div>

@@ -15,7 +15,8 @@ import { HttpModule } from '@angular/http';
   declarations: [
     AppComponent,
     ChatComponent,
-    LoginComponent
+    LoginComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
