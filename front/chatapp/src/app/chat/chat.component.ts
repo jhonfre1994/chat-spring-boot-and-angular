@@ -36,6 +36,7 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.talks = [];
     this.socketService = new Socket(new ChatComponent(this.sessionService, this.chatService))
     this.currerntSession = this.socketService.getUserSessionDataToken();
     console.log(this.currerntSession)
@@ -134,6 +135,7 @@ export class ChatComponent implements OnInit {
   }
 
   updateStatusSession(status: string) {
+    this.currerntSession.status = status;
     this.sessionService.updateStatusSession(this.currerntSession.userName, status).subscribe(res => {
       console.log(res)
     })

@@ -44,12 +44,12 @@
 .chat-sidenav{
     border-right: 1px solid transparent;
     overflow: hidden;
-    width: 200px;   
+    width: 280px;   
 }
 .chat-content{
     overflow: auto;
     padding: 12px;
-    height: calc(100vh - (56px + 8px*2 + 238px));
+    height: calc(100vh - (56px + 8px*2 + 120px));
 }
 .chat-sidenav-list {
     height: calc(100vh - (56px + 8px*2 + 134px));
@@ -58,8 +58,6 @@
 
 .chat-status-icon_online{
     font-size: 14px;
-    height: 14px;
-    width: 14px;
     line-height: 22px;
     margin-right: 6px;
     color: #94c23d;
@@ -111,11 +109,6 @@
 .messageMine{
     text-align:start !important;
     text-align: justify;
-}
-
-.mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content{
-    padding: 0px !important;
-    display: contents !important;
 }
 
 span{

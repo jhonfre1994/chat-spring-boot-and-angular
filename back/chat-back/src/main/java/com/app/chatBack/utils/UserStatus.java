@@ -1,4 +1,4 @@
-package com.app.chatBack.model;
+package com.app.chatBack.utils;
 
 public final class UserStatus {
 

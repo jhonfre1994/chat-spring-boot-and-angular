@@ -1,4 +1,4 @@
-package com.app.chatBack.service;
+package com.app.chatBack.service.impl;
 
 import com.app.chatBack.model.ChatRoom;
 import com.app.chatBack.repository.ChatRoomRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ChatRoomService {
+public class ChatRoomServiceImpl {
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;

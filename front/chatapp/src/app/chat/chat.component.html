@@ -7,7 +7,21 @@
                     <mat-toolbar color="primary" class="p-0" fxLayout="row" fxLayoutAlign="space-between center">
                         <mat-list class="p-0">
                             <mat-list-item>
-                                <img matListAvatar [src]="">
+                                <span [ngSwitch]="currerntSession.status" style="width: 50px;">
+                                    <mat-icon *ngSwitchCase="'En linea'" class="chat-status-icon_online">check_circle
+                                    </mat-icon>
+                                    <mat-icon *ngSwitchCase="'Desconectado'" class="chat-status-icon_disconnect">
+                                        highlight_off
+                                    </mat-icon>
+                                    <mat-icon *ngSwitchCase="'Ausente'" class="chat-status-icon_wait">schedule
+                                    </mat-icon>
+                                    <mat-icon *ngSwitchCase="'No molestar'" class="chat-status-icon_dontDisturb">
+                                        not_interested
+                                    </mat-icon>
+                                </span>
+                                <div mat-line style="color: blanchedalmond;">
+                                    <p>{{currerntSession.name}} {{currerntSession.lastName}}</p>
+                                </div>
                             </mat-list-item>
                         </mat-list>
                         <button mat-icon-button [matMenuTriggerFor]="userMenu" #userMenuTrigger="matMenuTrigger">
@@ -41,15 +55,18 @@
                         <mat-list-item (click)="getChat(chat)" *ngFor="let chat of chats">
                             <!-- <img mat-list-icon [src]=""> -->
                             <div style="font-size: 15px;" mat-line>{{chat.name}} {{chat.lastName}}</div>
-                            <span [ngSwitch]="chat.status">
-                                <mat-icon *ngSwitchCase="'En linea'" class="chat-status-icon_online">check_circle</mat-icon>
-                                <mat-icon *ngSwitchCase="'Desconectado'" class="chat-status-icon_disconnect">highlight_off
+                            <span [ngSwitch]="chat.status" style="width: 50px;">
+                                <mat-icon *ngSwitchCase="'En linea'" class="chat-status-icon_online">check_circle
+                                </mat-icon>
+                                <mat-icon *ngSwitchCase="'Desconectado'" class="chat-status-icon_disconnect">
+                                    highlight_off
                                 </mat-icon>
                                 <mat-icon *ngSwitchCase="'Ausente'" class="chat-status-icon_wait">schedule</mat-icon>
-                                <mat-icon *ngSwitchCase="'No molestar'" class="chat-status-icon_dontDisturb">not_interested
-                                </mat-icon> 
+                                <mat-icon *ngSwitchCase="'No molestar'" class="chat-status-icon_dontDisturb">
+                                    not_interested
+                                </mat-icon>
                             </span>
-                            <div mat-line style="font-size: 10px; ">
+                            <div mat-line style="font-size: 11px; ">
                                 <some-element [ngPlural]="chat.newMessages">
                                     <ng-template ngPluralCase="=0"></ng-template>
                                     <ng-template ngPluralCase="=1">{{chat.newMessages}} mensaje nuevo</ng-template>
@@ -112,12 +129,12 @@
                             <mat-list-item *ngFor="let talk of talks" class="talk-item">
                                 <!-- <img matListAvatar [src]=""> -->
                                 <p matLine
-                                    [ngClass]="(talk.senderName == this.currentChat.userName) ? 'messageNotMine' : 'messageMine'">
+                                    [ngClass]="(talk.senderName == this.currentChat.userName) ? 'messageMine' : 'messageNotMine'">
                                     <span
                                         [ngClass]="(talk.senderName == this.currentChat.userName) ? 'mine' : 'notMine'">{{talk.content}}</span>
                                 </p>
                                 <p matLine
-                                    [ngClass]="(talk.senderName == this.currentChat.userName) ? 'messageNotMine' : 'messageMine'">
+                                    [ngClass]="(talk.senderName == this.currentChat.userName) ? 'messageMine' : 'messageNotMine'">
                                     <small>{{talk.timestamp | date:"dd MMMM, yyyy 'at' HH:mm"}}</small>
                                 </p>
                             </mat-list-item>
@@ -131,15 +148,15 @@
                     <mat-card class="chat-actions">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <mat-form-field style="width: 100%;">
-                                <input [disabled]="!hideElement" matInput placeholder="Escribe un mensaje..." 
-                                    [(ngModel)]="newMessage"  (keyup.enter)="sendMs(newMessage)">
+                                <input [disabled]="!hideElement" matInput placeholder="Escribe un mensaje..."
+                                    [(ngModel)]="newMessage" (keyup.enter)="sendMs(newMessage)">
                             </mat-form-field>
                             <div fxLayout="row" fxLayoutAlign="scenter center">
                                 <!-- <button mat-icon-button type="button">
                                   <mat-icon>attach_file</mat-icon>
                               </button> -->
                                 <button [disabled]="!hideElement" mat-mini-fab color="primary" type="button"
-                                (click)="sendMs(newMessage)">
+                                    (click)="sendMs(newMessage)">
                                     <mat-icon>send</mat-icon>
                                 </button>
                             </div>

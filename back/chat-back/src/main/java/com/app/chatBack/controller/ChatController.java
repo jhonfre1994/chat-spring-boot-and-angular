@@ -1,16 +1,14 @@
 package com.app.chatBack.controller;
 
 import com.app.chatBack.model.ChatMessage;
-import com.app.chatBack.model.ChatNotification;
 import com.app.chatBack.service.ChatMessageService;
-import com.app.chatBack.service.ChatRoomService;
+import com.app.chatBack.service.impl.ChatRoomServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -22,18 +20,12 @@ public class ChatController {
     private SimpMessagingTemplate messagingTemplate;
     @Autowired
     private ChatMessageService chatMessageService;
-    @Autowired
-    private ChatRoomService chatRoomService;
 
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {
-        var chatId = chatRoomService
-                .getChatId(chatMessage.getSenderName(), chatMessage.getRecipientName(), true);
-        chatMessage.setChatId(chatId.get());
-
-        ChatMessage saved = chatMessageService.save(chatMessage);
+        ChatMessage message = chatMessageService.saveMessage(chatMessage);
         messagingTemplate.convertAndSendToUser(
-                chatMessage.getRecipientName(), "/queue/messages", chatMessage);
+                message.getRecipientName(), "/queue/messages", message);
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}/count")

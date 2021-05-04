@@ -66,3 +66,16 @@
     50% {opacity: 1}
     100%{opacity: 0}
 }
+
+:host ::ng-deep .mat-list-item-content { 
+    padding: 0!important; 
+}
+
+:host ::ng-deep .mat-list-base .mat-list-item.mat-2-line, .mat-list-base .mat-list-option.mat-2-lin{
+    height: 50px;
+    padding: 0px 0px 0px 8px;
+}
+
+:host ::ng-deep .mat-toolbar{
+    padding: 0px 0px 0px 8px;
+}
