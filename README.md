@@ -63,5 +63,5 @@ Para hacer uso del chat es necesario utilizar un servicio de autenticacion, podr
 
 ## Licencia 📄
 
-Este proyecto está bajo la Licencia (MIT) - mira el archivo [LICENSE.md](https://github.com/jhonfre1994/multi-tenant-spring-boot/blob/main/LICENSE) para detalles
+Este proyecto está bajo la Licencia (MIT) - mira el archivo [LICENSE.md](https://github.com/jhonfre1994/chat-spring-boot-and-angular/blob/master/LICENSE.md) para detalles
 
