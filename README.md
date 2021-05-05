@@ -21,7 +21,6 @@ Este proyecto esta construido con las siguientes tecnologias:
 * mongoDB
 
 ### El proyecto backend construida con los siguientes componentes:
-   * Model: Objetos que se usan para la comunicación a través de las API
    * Controller: Responde a eventos lanzados por el usuario desde la web.
    * Service: Implementa la logica de procesamiento de información y la logica de negocio.
    * Repository: Interfaces para la base de datos, guarda, elimina y consulta.
