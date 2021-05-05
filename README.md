@@ -19,8 +19,6 @@ Este proyecto esta construido con las siguientes tecnologias:
 * Spring Data MongoDB
 * Maven
 * mongoDB
-* Sptring Security
-* Jwt (Json Web Token)
 
 ### El proyecto backend construida con los siguientes componentes:
    * Model: Objetos que se usan para la comunicación a través de las API
