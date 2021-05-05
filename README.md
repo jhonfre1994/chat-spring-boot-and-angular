@@ -38,7 +38,7 @@ Este proyecto esta construido con las siguientes tecnologias:
 
 ## Autenticacion
 
-Para hacer uso del chat es necesario utilizar un servicio de autenticacion, podra encontrar el sericio que se utilizo en el siguiente [enlace](https://github.com/jhonfre1994/oauth2-jwt-spring-boot-example). Ahi encontrara mas información sobre el servicio de autenticacion construido. 
+Para hacer uso del chat es necesario utilizar un servicio de autenticacion, podra encontrar el servicio que se utilizo en el siguiente [enlace](https://github.com/jhonfre1994/oauth2-jwt-spring-boot-example). Ahi encontrara mas información sobre el servicio de autenticacion construido. 
 
 
 ## Capturas de pantalla
