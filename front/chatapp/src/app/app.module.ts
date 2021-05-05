@@ -10,6 +10,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ChatComponent } from './chat/chat.component';
 import { LoginComponent } from './login/login.component';
 import { HttpModule } from '@angular/http';
+import { AuthGuardService } from './guard/auth-guard.service';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,10 @@ import { HttpModule } from '@angular/http';
     HttpClientModule,
     HttpModule
   ],
-  providers: [ChatComponent],
+  providers: [ChatComponent, 
+    AuthGuardService, 
+    JwtHelperService,
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
