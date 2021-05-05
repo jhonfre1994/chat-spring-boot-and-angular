@@ -37,6 +37,9 @@ Este proyecto esta construido con las siguientes tecnologias:
 
 Para hacer uso del chat es necesario utilizar un servicio de autenticacion, podra encontrar el servicio que se utilizo en el siguiente [enlace](https://github.com/jhonfre1994/oauth2-jwt-spring-boot-example). Ahi encontrara mas información sobre el servicio de autenticacion construido. 
 
+### Usuarios y Contraseñas
+ - existen 3 usuarios diferentes (admin, user1 y user2), Para cualquiera usuario la clave es admin.
+
 
 ## Capturas de pantalla
 
