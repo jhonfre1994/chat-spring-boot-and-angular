@@ -1,4 +1,4 @@
-package com.app.chatBack.model;
+package com.app.chatBack.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +11,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document
-public class ChatRoom {
+@Document(collection = "client")
+public class Client {
+
     @Id
     private String id;
-    private String chatId;
-    private String senderUserName;
-    private String recipientUserName;
+    private String fullName;
+    private String phone;
+    private Consultant consultantId;
 }

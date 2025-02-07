@@ -1,4 +1,4 @@
-package com.app.chatBack.model;
+package com.app.chatBack.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,16 +12,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document
+@Document(collection = "chat_message")
 public class ChatMessage {
+
    @Id
    private String id;
    private String chatId;
-   private String senderId;
-   private String recipientId;
-   private String senderName;
-   private String recipientName;
+   private String clientId;
+   private String consultantId;
    private String content;
    private Date timestamp;
    private String status;
+   private String typeMessage;
+
 }

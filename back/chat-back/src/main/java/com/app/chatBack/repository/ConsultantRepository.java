@@ -5,14 +5,14 @@
  */
 package com.app.chatBack.repository;
 
-import com.app.chatBack.model.UserSession;
+import com.app.chatBack.model.entity.Consultant;
 import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  *
  * @author jhonfre
  */
-public interface SessionsRepository extends MongoRepository<UserSession, String>{
+public interface ConsultantRepository extends MongoRepository<Consultant, String>{
     
-    UserSession findByUserName(String userName);
+    Consultant findByUserName(String userName);
     
 }

@@ -5,8 +5,9 @@
  */
 package com.app.chatBack.controller;
 
-import com.app.chatBack.model.UserSession;
-import com.app.chatBack.service.SessionService;
+import com.app.chatBack.exceptions.ApiException;
+import com.app.chatBack.model.entity.Consultant;
+import com.app.chatBack.service.ConsultantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,26 +25,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @CrossOrigin(origins = "*", allowedHeaders = "true")
-@RequestMapping("/api/v.1/sessions")
+@RequestMapping("/consultant")
 public class UserSessionController {
 
     @Autowired
-    private SessionService sessionService;
+    private ConsultantService sessionService;
 
     @PostMapping()
-    public ResponseEntity<?> saveSession(@RequestBody UserSession session) {
+    public ResponseEntity<?> saveSession(@RequestBody Consultant session) throws ApiException {
         return ResponseEntity.ok(sessionService.saveSessionUser(session));
     }
 
-    @GetMapping()
-    public ResponseEntity<?> getSessions() {
-        return ResponseEntity.ok(sessionService.getUsersSession());
-    }
-
-    @PutMapping("/{username}/{status}")
-    public ResponseEntity<?>  updateStatus(@PathVariable("username") String username, @PathVariable("status") String status) {
-        sessionService.updateStatus(username, status);
-        return ResponseEntity.ok("Cambio de estado correcto");
+    @GetMapping("/{consultantUserName}")
+    public ResponseEntity<?> getSessions() throws ApiException {
+        return ResponseEntity.ok(sessionService.getAllConsultants());
     }
 
 }

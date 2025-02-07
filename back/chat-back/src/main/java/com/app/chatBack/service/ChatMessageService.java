@@ -5,7 +5,8 @@
  */
 package com.app.chatBack.service;
 
-import com.app.chatBack.model.ChatMessage;
+import com.app.chatBack.exceptions.ApiException;
+import com.app.chatBack.model.entity.ChatMessage;
 import java.util.List;
 
 /**
@@ -14,13 +15,11 @@ import java.util.List;
  */
 public interface ChatMessageService {
     
-    ChatMessage saveMessage(ChatMessage chatMessage);
-    
-    long countNewMessages(String senderName, String recipientName);
-    
+    ChatMessage saveMessage(ChatMessage chatMessage) throws ApiException;
+
     List<ChatMessage> findChatMessages(String senderName, String recipientName);
     
-    ChatMessage findById(String id);
+    ChatMessage findById(String id) throws ApiException;
     
     void updateStatuses(String senderName, String recipientName, String status);
 }

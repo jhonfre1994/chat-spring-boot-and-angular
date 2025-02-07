@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.app.chatBack.model;
+package com.app.chatBack.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,14 +20,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document
-public class UserSession {
+@Document(collection = "consultant")
+public class Consultant {
 
     @Id
     private String id;
     private String userName;
     private String name;
     private String lastName;
-    private String status;
 
 }

@@ -1,6 +1,6 @@
 package com.app.chatBack.repository;
 
-import com.app.chatBack.model.ChatRoom;
+import com.app.chatBack.model.entity.ChatRoom;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
