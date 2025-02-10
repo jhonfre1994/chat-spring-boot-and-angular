@@ -19,4 +19,5 @@ public class Client {
     private String fullName;
     private String phone;
     private Consultant consultantId;
+    private String ChatId;
 }

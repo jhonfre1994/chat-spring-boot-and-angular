@@ -27,17 +27,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
 
     @Override
-    public List<ChatMessage> findChatMessages(String senderName, String recipientName) {
-        var chatId = chatRoomService.getChatId(senderName, recipientName);
-
-        var messages
-                = chatId.map(cId -> repository.findByChatId(cId)).orElse(new ArrayList<>());
-
-        if (messages.size() > 0) {
-            updateStatuses(senderName, recipientName, MessageStatus.DELIVERED);
-        }
-
-        return messages;
+    public List<ChatMessage> findChatMessages(String chatId) throws ApiException {
+        var chat = chatRoomService.getByIdChat(chatId);
+        return repository.findByChatId(chat);
     }
 
     @Override
@@ -70,13 +62,13 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     @Override
     public ChatMessage saveMessage(ChatMessage chatMessage) throws ApiException {
         var chatId = chatRoomService
-                .getChatId(chatMessage.getClientId(), chatMessage.getConsultantId());
+                .getByIdChat(chatMessage.getChatId());
 
         if (chatId.isEmpty()) {
             throw new ApiException("Chat not found", HttpStatus.NOT_FOUND.value());
         }
 
-        chatMessage.setChatId(chatId.get());
+        chatMessage.setChatId(chatId);
         chatMessage.setStatus(MessageStatus.RECEIVED);
         repository.save(chatMessage);
         return chatMessage;

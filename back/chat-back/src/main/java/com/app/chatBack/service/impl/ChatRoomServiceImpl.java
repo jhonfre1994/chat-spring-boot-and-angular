@@ -1,5 +1,6 @@
 package com.app.chatBack.service.impl;
 
+import com.app.chatBack.exceptions.ApiException;
 import com.app.chatBack.model.entity.ChatRoom;
 import com.app.chatBack.repository.ChatRoomRepository;
 import com.app.chatBack.service.ChatRoomService;
@@ -36,5 +37,15 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
                     return Optional.of(chatId);
                 });
+    }
+
+    @Override
+    public String getByIdChat(String chatId) throws ApiException {
+
+        Optional<ChatRoom> chatRoom = chatRoomRepository.findByChatId(chatId);
+        if (chatRoom.isEmpty()) {
+            throw new ApiException("ChatRoom not found", 404);
+        }
+        return chatRoom.get().getChatId();
     }
 }

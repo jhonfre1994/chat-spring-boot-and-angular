@@ -52,8 +52,9 @@ public class ClientServiceImpl implements ClientService {
             Consultant consultant = consultants.get(rnd);
             Client client = MapperUtils.mapObjectToObject(clientDTO, Client.class);
             client.setConsultantId(consultant);
+            Optional<String> chatId = chatRoomService.getChatId(consultant.getUserName(), client.getPhone());
+            chatId.ifPresent(client::setChatId);
             client = clientRepository.save(client);
-            chatRoomService.getChatId(consultant.getUserName(), client.getPhone());
             log.info("/" + consultant.getUserName() + "/user/queue/users");
             messagingTemplate.convertAndSendToUser(consultant.getUserName(), "/user/queue/users", client);
             return ResponseDTO.builder()

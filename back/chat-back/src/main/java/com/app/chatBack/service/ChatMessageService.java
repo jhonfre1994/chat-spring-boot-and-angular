@@ -17,7 +17,7 @@ public interface ChatMessageService {
     
     ChatMessage saveMessage(ChatMessage chatMessage) throws ApiException;
 
-    List<ChatMessage> findChatMessages(String senderName, String recipientName);
+    List<ChatMessage> findChatMessages(String chatId) throws ApiException;
     
     ChatMessage findById(String id) throws ApiException;
     

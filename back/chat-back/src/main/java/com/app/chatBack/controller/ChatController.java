@@ -11,6 +11,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 //@CrossOrigin(origins = "*", allowedHeaders = "true")
@@ -25,25 +27,21 @@ public class ChatController {
     public void processMessage(@Payload ChatMessage chatMessage) throws ApiException {
         ChatMessage message = chatMessageService.saveMessage(chatMessage);
         messagingTemplate.convertAndSendToUser(
-                message.getClientId(), "/queue/messages", message);
+                message.getConsultantId(), "/queue/messages", message);
     }
 
 
-    @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<?> findChatMessages(@PathVariable String senderId,
-            @PathVariable String recipientId) {
+    @GetMapping("/messages/{chatId}")
+    public ResponseEntity<?> findChatMessages(@PathVariable String chatId) throws ApiException {
         return ResponseEntity
-                .ok(chatMessageService.findChatMessages(senderId, recipientId));
+                .ok(chatMessageService.findChatMessages(chatId));
     }
 
-    @GetMapping("/messages/{id}")
-    public ResponseEntity<?> findMessage(@PathVariable String id) throws ApiException {
-        return ResponseEntity
-                .ok(chatMessageService.findById(id));
+    @PostMapping("/chatTest")
+    public ResponseEntity<Void> testMessaje(@RequestBody ChatMessage chatMessage) throws ApiException {
+        ChatMessage message = chatMessageService.saveMessage(chatMessage);
+        messagingTemplate.convertAndSendToUser(
+                message.getChatId(), "/queue/messages", message);
+        return ResponseEntity.ok().build();
     }
-
-  @MessageMapping("/test")
-  public void findMessage2() {
-    messagingTemplate.convertAndSend("/user/queue/users", "as");
-  }
 }
